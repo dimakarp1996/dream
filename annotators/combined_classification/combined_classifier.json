@@ -160,7 +160,8 @@
           },
           "deeppavlov_topics": {
             "type": "classification",
-            "options": 33
+            "options": 33,
+            "multilabel": true
           },
           "topics": {
             "type": "classification",
