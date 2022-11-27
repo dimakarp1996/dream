@@ -55,13 +55,12 @@ def main_test():
         {
             "sentences": [
                 "do you like porn",
-                "have you been to Alaska",
-                "please talk about movies",
-                "please talk about books",
-                "talk about games",
+                "please talk about movies"
             ],
             "task": "deeppavlov_topics",
-            "answers_bert": [["Music"], ["Disasters"], ["Movies_TV"], ["Books&Literature"], ["Videogames"]],
+            "answers_bert": [["Music", "Celebrities&Events", "Leisure", "Gadgets",
+                              "Home&Design", "Psychology", "Clothes"],
+                             ["Movies_TV", "PersonalTransport"]],
         },
         {
             "sentences": ["you son of the bitch", "yes", "do you like porn"],
