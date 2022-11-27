@@ -53,14 +53,12 @@ def main_test():
             "answers_bert": [["opinion"]],
         },
         {
-            "sentences": [
-                "do you like porn",
-                "please talk about movies"
-            ],
+            "sentences": ["do you like porn", "please talk about movies"],
             "task": "deeppavlov_topics",
-            "answers_bert": [["Music", "Celebrities&Events", "Leisure", "Gadgets",
-                              "Home&Design", "Psychology", "Clothes"],
-                             ["Movies_TV", "PersonalTransport"]],
+            "answers_bert": [
+                ["Music", "Celebrities&Events", "Leisure", "Gadgets", "Home&Design", "Psychology", "Clothes"],
+                ["Movies_TV", "PersonalTransport"],
+            ],
         },
         {
             "sentences": ["you son of the bitch", "yes", "do you like porn"],
