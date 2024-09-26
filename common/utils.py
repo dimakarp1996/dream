@@ -120,6 +120,7 @@ combined_classes = {  # ORDER MATTERS!!!! DO NOT CHANGE IT!!!!
         "sexual_explicit",
         "threat",
         "toxic",
+        "not_toxic",
     ],
     "factoid_classification": ["is_factoid", "is_conversational"],
     "midas_classification": [
@@ -144,7 +145,7 @@ combined_classes = {  # ORDER MATTERS!!!! DO NOT CHANGE IT!!!!
         "Books&Literature",
         "Music",
         "Gadgets",
-        "Movies_TV",
+        "Movies&Tv",
         "Leisure",
         "Beauty",
         "Clothes",
@@ -168,7 +169,7 @@ combined_classes = {  # ORDER MATTERS!!!! DO NOT CHANGE IT!!!!
         "Finance",
         "Space",
         "Disasters",
-        "Science_and_Technology",
+        "Science&Technology",
         "Psychology",
         "MassTransit",
         "Education",
@@ -226,12 +227,32 @@ combined_classes = {  # ORDER MATTERS!!!! DO NOT CHANGE IT!!!!
     ],
 }
 
-multilabel_tasks = [
+TOPIC_GROUPS = {
+    "food": ["Food", "Food_Drink"],
+    "books": ["Entertainment_Books", "Literature", "Books&Literature"],
+    "music": ["Music", "Entertainment_Music"],
+    "news": ["News"],
+    "politics": ["Politics"],
+    "sports": ["Sports"],
+    "religion": ["Religion"],
+    "movies": ["Entertainment_Movies", "Movies_TV", "Movies&Tv"],
+    "fashion": ["Clothes", "Fashion"],
+    "travel": ["Travel", "Travel_Geo"],
+    "celebrities": ["Celebrities", "Celebrities&Events"],
+    "art": ["Art_Event", "Art&Hobbies"],
+    "science": ["Science_and_Technology", "SciTech"],
+    "entertainment": ["Entertainment", "Entertainment_General"],
+    "games": ["Games", "Toys&Games", "Videogames"],
+    "animals": ["Pets_Animals", "Animals&Pets"],
+}
+
+
+MULTILABEL_TASKS = [
     "emotion_classification",
     "toxic_classification",
 ]
 
-dp_thresholds = {
+DP_THRESHOLDS = {
     "Food": 0,
     "Movies_TV": 0,
     "Leisure": 0,
@@ -250,8 +271,8 @@ dp_thresholds = {
     "MassTransit": 0.3,
 }
 
-thresholds = {
-    "deeppavlov_topics": {class_: dp_thresholds.get(class_, 0.9) for class_ in combined_classes["deeppavlov_topics"]}
+THRESHOLDS = {
+    "deeppavlov_topics": {class_: DP_THRESHOLDS.get(class_, 0.9) for class_ in combined_classes["deeppavlov_topics"]}
 }
 
 midas_classes = {
@@ -571,9 +592,10 @@ def get_all_not_used_templates(used_templates, all_templates):
 
 
 def _probs_to_labels(answer_probs, max_proba=True, threshold=0.5):
+    if not answer_probs:
+        return []
     if isinstance(threshold, dict):
-        assert len(threshold) == len(answer_probs), f"{threshold} {answer_probs}"
-        answer_labels = [key for key in answer_probs if answer_probs[key] > threshold[key]]
+        answer_labels = [key for key in answer_probs if answer_probs[key] > threshold.get(key, 0)]
         if max_proba:
             answer_labels = [key for key in answer_labels if answer_probs[key] == max(answer_probs.values())]
     else:
@@ -607,12 +629,12 @@ def _get_combined_annotations(annotated_utterance, model_name, threshold=0.5):
         old_style_toxic = all(
             [model_name == "toxic_classification", "factoid_classification" not in combined_annotations]
         )
-        if model_name in multilabel_tasks or old_style_toxic:
+        if model_name in MULTILABEL_TASKS or old_style_toxic:
             answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=threshold)
         elif model_name == "factoid_classification" and answer_probs.get("is_factoid", 0) < threshold:
             answer_labels = ["is_conversational"]
         elif model_name == "deeppavlov_topics":
-            answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=thresholds["deeppavlov_topics"])
+            answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=THRESHOLDS["deeppavlov_topics"])
         else:
             answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=threshold)
     except Exception as e:

@@ -3,11 +3,11 @@
     "variables": {
       "BACKBONE": "distilbert-base-uncased",
       "MODELS_PATH": "~/.deeppavlov/models",
-      "SINGLE_SENTENCE_LEN": 64,
+      "SINGLE_SENTENCE_LEN": 32,
       "MULTI_SENTENCE_LEN": 128
     },
     "download":[{
-        "url": "http://files.deeppavlov.ai/dream_data/distil9in1/9in1_v1.tar.gz",
+        "url": "http://files.deeppavlov.ai/dream_data/distil9in1_singlelabel/9in1_singlelabel_v2_no_history.tar.gz",
         "subdir": "{MODELS_PATH}"
       }]
   },
@@ -139,40 +139,47 @@
           "emo": {
             "type": "classification",
             "options": 7,
-            "multilabel": true
+            "type_to_cache": 0
           },
           "sentiment": {
             "type": "classification",
-            "options": 3
+            "options": 3,
+            "type_to_cache": 0
           },
           "toxic": {
             "type": "classification",
-            "options": 7,
-            "multilabel": true
+            "options": 8,
+            "type_to_cache": 0
           },
           "factoid": {
             "type": "classification",
-            "options": 2
+            "options": 2,
+            "type_to_cache": 0
           },
           "midas": {
             "type": "classification",
-            "options": 15
+            "options": 15,
+            "type_to_cache": 0
           },
           "deeppavlov_topics": {
             "type": "classification",
-            "options": 33
+            "options": 33,
+            "type_to_cache": 0
           },
           "topics": {
             "type": "classification",
-            "options": 22
+            "options": 22,
+            "type_to_cache": 0
           },
           "dialogact_topics": {
             "type": "classification",
-            "options": 11
+            "options": 11,
+            "type_to_cache": 0
           },
           "dialogact_intents": {
             "type": "classification",
-            "options": 11
+            "options": 11,
+            "type_to_cache": 0
           }
         },
         "in": [
